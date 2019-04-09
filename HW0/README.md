@@ -6,7 +6,6 @@
 </div>
   <br>
 <div>
-  <h1>Technology Interests:</h1>
   <p>I will save all my works in cloud storage serviece which also allows me to have local backup, I will also update git using standard git work flow.</p>
   <p>My internet backup would be library (which is only couple blocks away) or local cafes.</p>
   <p>My computer backup is the computer on campus.</p>
