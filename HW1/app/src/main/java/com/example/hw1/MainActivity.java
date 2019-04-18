@@ -13,12 +13,14 @@ public class MainActivity extends AppCompatActivity {
         TextView content = new TextView(this);
 
 
-        String name = "Yun F. Sui";
-        String techInterests
-                = "I am interested in Aviation related IT files"
-                + "(aka. automation, data analysis and visulizaion, controls, infurstructure,"
-                + " and VR applications.)";
-        content.setText(name + "\n" + techInterests);
+        //String name = "Yun F. Sui";
+        //String techInterests
+        //        = "I am interested in Aviation related IT files"
+        //        + "(aka. automation, data analysis and visulizaion, controls, infurstructure,"
+        //        + " and VR applications.)";
+        //content.setText(name + "\n" + techInterests);
+
+        content.setText(R.string.text);
 
         setContentView(content);
     }
