@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String MESSAGE_ID = "my.message";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +27,9 @@ public class MainActivity extends AppCompatActivity {
         EditText textbox = (EditText) findViewById(R.id.message_box);
         String message = textbox.getText().toString();
 
-        Intent intent = new Intent(this, SecondActivity.class);
-
-        startActivity(intent);
+        Intent intentToSecond = new Intent(this, SecondActivity.class);
+        intentToSecond.putExtra(MESSAGE_ID, message);
+        startActivity(intentToSecond);
     }
 
 

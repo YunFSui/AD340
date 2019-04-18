@@ -16,9 +16,13 @@ public class SecondActivity  extends AppCompatActivity  {
         super.onCreate(savedState);
 
         setContentView(R.layout.activity_second);
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(MainActivity.MESSAGE_ID);
+
+        TextView label = (TextView)findViewById(R.id.intent_message);
+        label.setText(message);
     }
 
-    @Override
-    protected  
+
 
 }
