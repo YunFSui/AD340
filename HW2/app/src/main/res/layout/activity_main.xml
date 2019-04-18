@@ -18,11 +18,11 @@
         android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Type to send massage to 2nd Activity" />
 
     <EditText
         android:id="@+id/message_box"
-        android:layout_width="200dp"
+        android:layout_width="400dp"
         android:layout_height="50dp"
         android:layout_margin="10dp"/>
 
