@@ -10,9 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class SecondActivity  extends AppCompatActivity  {
+    private static  final String TAG = "Message from 1st Act: ";
 
     @Override
     protected void onCreate(Bundle savedState) {
+
         super.onCreate(savedState);
 
         setContentView(R.layout.activity_second);
@@ -21,6 +23,10 @@ public class SecondActivity  extends AppCompatActivity  {
 
         TextView label = (TextView)findViewById(R.id.intent_message);
         label.setText(message);
+
+        Log.i(TAG, this.getLifecycle()
+                .getCurrentState()
+                .toString());
     }
 
 
