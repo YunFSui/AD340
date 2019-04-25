@@ -31,13 +31,13 @@ public class ThirdActivity extends AppCompatActivity{
         title.setText(kits[position].getTitle());
 
         TextView year = (TextView)findViewById(R.id.year);
-        title.setText("Year: " + kits[position].getYear());
+        year.setText("Year: " + kits[position].getYear());
 
         TextView director = (TextView)findViewById(R.id.director);
-        title.setText("Director: " + kits[position].getDirector());
+        director.setText("Director: " + kits[position].getDirector());
 
         TextView description = (TextView)findViewById(R.id.description);
-        title.setText(kits[position].getDescription());
+        description.setText(kits[position].getDescription());
 
 
     }
