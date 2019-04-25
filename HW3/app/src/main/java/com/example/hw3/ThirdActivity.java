@@ -1,11 +1,15 @@
 package com.example.hw3;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.InputStream;
+import java.net.URL;
 
 public class ThirdActivity extends AppCompatActivity{
 
@@ -27,8 +31,10 @@ public class ThirdActivity extends AppCompatActivity{
         Log.i(TAG, "position " + position);
         Log.i(TAG, kits[position].getTitle());
 
+        String tit = kits[position].getTitle();
+
         TextView title = (TextView)findViewById(R.id.title);
-        title.setText(kits[position].getTitle());
+        title.setText(tit);
 
         TextView year = (TextView)findViewById(R.id.year);
         year.setText("Year: " + kits[position].getYear());
@@ -38,9 +44,25 @@ public class ThirdActivity extends AppCompatActivity{
 
         TextView description = (TextView)findViewById(R.id.description);
         description.setText(kits[position].getDescription());
+        ImageView image = (ImageView)findViewById(R.id.image);
+        String url = kits[position].getUri();
+        image.setImageDrawable(LoadImageFromWebOperations(url));
+
+
+
+
+
 
 
     }
-
+    public static Drawable LoadImageFromWebOperations(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
 }
