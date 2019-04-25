@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <Button
+        android:id="@+id/btn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to 2nd ACT"
+        android:layout_margin="16dp"
+        android:layout_alignParentTop="true"
+        android:onClick="toSecond"/>
+
+    <Button
+        android:id="@+id/btn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="get toast 1"
+        android:layout_margin="16dp"
+        android:layout_toRightOf="@+id/btn1"
+        android:onClick="getToast"/>
+
+    <Button
+        android:id="@+id/btn3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="get toast 2"
+        android:layout_margin="16dp"
+        android:layout_below="@+id/btn1"
+        android:onClick="getToast"/>
+
+    <Button
+        android:id="@+id/btn4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="get toast 3"
+        android:layout_margin="16dp"
+        android:layout_below="@+id/btn2"
+        android:layout_toRightOf="@+id/btn3"
+        android:onClick="getToast"/>
+
+
+
+</RelativeLayout>
