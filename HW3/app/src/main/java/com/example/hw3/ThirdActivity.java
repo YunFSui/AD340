@@ -16,7 +16,7 @@ public class ThirdActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
-        setContentView(R.layout.activity_thrid);
+        setContentView(R.layout.activity_third);
 
         Intent intent = getIntent();
         String pos = intent.getStringExtra(SecondActivity.MESSAGE_ID);
