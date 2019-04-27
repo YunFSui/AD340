@@ -1,6 +1,6 @@
 package com.example.hw3;
 
-import android.graphics.drawable.Drawable;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
@@ -8,8 +8,8 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.InputStream;
-import java.net.URL;
+import com.squareup.picasso.Picasso;
+
 
 public class ThirdActivity extends AppCompatActivity{
 
@@ -44,25 +44,19 @@ public class ThirdActivity extends AppCompatActivity{
 
         TextView description = (TextView)findViewById(R.id.description);
         description.setText(kits[position].getDescription());
+
         ImageView image = (ImageView)findViewById(R.id.image);
         String url = kits[position].getUri();
-        image.setImageDrawable(LoadImageFromWebOperations(url));
 
+        Log.i(TAG, url);
 
+        Picasso.get().load(url).into(image);
 
 
 
 
 
     }
-    public static Drawable LoadImageFromWebOperations(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
-    }
+
 
 }

@@ -3,10 +3,14 @@ package com.example.hw3;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class LegoKitRecyclerAdapter
         extends  RecyclerView.Adapter<LegoKitRecyclerAdapter.ViewHolder> {
@@ -48,6 +52,8 @@ public class LegoKitRecyclerAdapter
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         CardView cardView = holder.layout;
+
+        ImageView card_image = (ImageView)cardView.findViewById(R.id.image);
         TextView title = (TextView)cardView.findViewById(R.id.title);
         TextView year =  (TextView)cardView.findViewById(R.id.year);
 
@@ -56,7 +62,6 @@ public class LegoKitRecyclerAdapter
         LegoKit kit = kits[position];
         String tit = kit.getTitle();
         String url = kit.getUri();
-
 
         title.setText(tit);
         year.setText("Year: "
