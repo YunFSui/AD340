@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Home Work 4</string>
+
+
+    <string name="nav_open_drawer">Open Drawer</string>
+    <string name="nav_close_drawer">Close Drawer</string>
+</resources>
