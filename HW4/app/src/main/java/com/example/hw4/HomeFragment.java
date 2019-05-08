@@ -1,7 +1,6 @@
 package com.example.hw4;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,8 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 
+
+
+
 public class HomeFragment extends Fragment
-                implements View.OnClickListener{
+        implements View.OnClickListener{
 
     public interface OnNextClickListener{
         void OnHomeFragmentNextClick(HomeFragment fragment);
@@ -25,6 +27,8 @@ public class HomeFragment extends Fragment
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
+
+
 
     @Override
     public void onAttach(Context context){

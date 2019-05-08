@@ -18,8 +18,8 @@ import android.support.v4.widget.DrawerLayout;
 
 
 public class HostActivity extends AppCompatActivity
-                    implements HomeFragment.OnNextClickListener,
-                        NavigationView.OnNavigationItemSelectedListener {
+        implements HomeFragment.OnNextClickListener,
+        NavigationView.OnNavigationItemSelectedListener {
 
     final static String TAG = "From HostActivity - ";
     private Toolbar toolbar;
@@ -89,7 +89,7 @@ public class HostActivity extends AppCompatActivity
             case R.id.action_settings:
                 Log.i(TAG, "Setting Clicked");
                 Toast toast = Toast.makeText(this,
-                         "Setting Clicked", Toast.LENGTH_SHORT);
+                        "Setting Clicked", Toast.LENGTH_SHORT);
                 toast.show();
                 return true;
 
