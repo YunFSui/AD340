@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Soda Price Calculator</string>
+    <string name="Login">Login</string>
+    <string-array name="isSugar">
+        <item>Sugary Drink</item>
+        <item>Diet Drink</item>
+    </string-array>
+</resources>
