@@ -57,9 +57,8 @@ public class SodaUnitTestMockito {
     public void defaultSodaValueHasDefault() {
         Soda defaultSoda = new Soda(mockContext);
 
-/*        boolean defaultIsSugar = defaultSoda.setSugary(defaultSoda.isSugary());
-        assertThat(defaultIsSugar).isTrue();*/
-        /*assertThat(defaultSoda.isSugary()).isEqualTo("Sugary Drink");*/
+        boolean defaultIsSugar = defaultSoda.setSugary("Sugary Drink");
+        assertThat(defaultIsSugar).isTrue();
 
         assertThat(defaultSoda.getPrice()).isEqualTo(1.0);
         assertThat(defaultSoda.getVol()).isEqualTo(1.0);
