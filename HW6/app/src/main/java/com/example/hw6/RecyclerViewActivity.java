@@ -25,7 +25,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
         String data = intent.getStringExtra(MESSAGE_ID);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        recyclerView.setHasFixedSize(true);
+        //recyclerView.setHasFixedSize(true);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
