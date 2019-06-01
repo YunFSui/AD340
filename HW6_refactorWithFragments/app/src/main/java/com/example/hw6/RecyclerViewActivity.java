@@ -1,3 +1,4 @@
+/*
 package com.example.hw6;
 
 import android.os.Bundle;
@@ -35,3 +36,4 @@ public class RecyclerViewActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 }
+*/

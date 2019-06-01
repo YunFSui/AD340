@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.hw6"
         minSdkVersion 22
@@ -32,4 +32,7 @@ dependencies {
 
     implementation 'com.android.support:support-annotations:27.0.0'
     implementation 'com.android.support:gridlayout-v7:27.0.0'
+
+
+
 }
