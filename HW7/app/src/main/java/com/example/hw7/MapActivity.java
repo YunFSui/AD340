@@ -2,6 +2,7 @@ package com.example.hw7;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -10,9 +11,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 //device loc
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -21,6 +19,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,11 +68,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         mMap.setMyLocationEnabled(true);
                         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-                        //Update the map
+                        //Device Location
                         LatLng d_loc = new LatLng(actualLocation.getLatitude(),
                                 actualLocation.getLongitude());
                         mMap.addMarker(new MarkerOptions()
-                                .position(d_loc).title("Current Location"));
+                                .position(d_loc).title("Current Location")
+                                .icon(BitmapDescriptorFactory
+                                        .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+
+                        //Camera Location
+                        Intent intent = getIntent();
+                        String[] camData = intent.getStringArrayExtra(MainActivity.MESSAGE_ID);
+                        Double camLat = Double.parseDouble(camData[0]);
+                        Double camLng = Double.parseDouble(camData[1]);
+                        String camDescription = camData[2];
+                        LatLng c_loc = new LatLng(camLat, camLng);
+                        mMap.addMarker(new MarkerOptions().position(c_loc).title(camDescription));
+
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(d_loc, 10));
 
                         mMap.animateCamera(CameraUpdateFactory.zoomTo(10));

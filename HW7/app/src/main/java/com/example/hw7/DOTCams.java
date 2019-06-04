@@ -13,6 +13,8 @@ public class DOTCams {
     private final static String TAG = "DOT Cameras := ";
     private String imageUrl;
     private String view;
+    private Double latitude;
+    private Double longitude;
 
     public DOTCams(String view){
         this.view = view;
@@ -25,6 +27,10 @@ public class DOTCams {
     public String getView() {
         return view;
     }
+
+    public Double getLat() {return latitude;}
+
+    public Double getLng() {return longitude;}
 
     public static class Constructor{
         DOTCams cam;
@@ -40,6 +46,16 @@ public class DOTCams {
 
         public Constructor imageUrl(String imageUrl){
             cam.imageUrl = imageUrl;
+            return this;
+        }
+
+        public Constructor latitude(Double latitude){
+            cam.latitude = latitude;
+            return this;
+        }
+
+        public Constructor longitude(Double longitude){
+            cam.longitude = longitude;
             return this;
         }
 
@@ -71,6 +87,8 @@ public class DOTCams {
         String full_url = "";
         String type;
         String description = "";
+        Double latitude;
+        Double longitude;
 
         JSONObject root = null;
         try {
@@ -85,10 +103,16 @@ public class DOTCams {
                 description = prop.getString("Description");
                 type = prop.getString("Type");
 
+                JSONArray coordinate = first.getJSONArray("PointCoordinate");
+                latitude = coordinate.getDouble(0);
+                longitude = coordinate.getDouble(1);
+
                 full_url = setImageUrl(type, imgUrl);
 
                 camArrayList.add(new DOTCams.Constructor().view(description)
                         .imageUrl(full_url)
+                        .latitude(latitude)
+                        .longitude(longitude)
                         .setDOTCam());
             }
 

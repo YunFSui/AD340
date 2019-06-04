@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -81,13 +82,19 @@ public class MainActivity extends AppCompatActivity
         DOTCamRecyclerAdapter adapter = new DOTCamRecyclerAdapter(cams);
         recyclerView.setAdapter(adapter);
 
-        final Intent intentLocTomap = new Intent(this, MapActivity.class);
+        final Intent intentLocToMap = new Intent(this, MapActivity.class);
 
         adapter.setListener(new DOTCamRecyclerAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                Log.i(TAG, "clicked");
-                startActivity(intentLocTomap);
+                String[] camPak = new String[4];
+                camPak[0] = Double.toString(cams[position].getLat());
+                camPak[1] = Double.toString(cams[position].getLng());
+                camPak[2] = cams[position].getView();
+                camPak[3] = cams[position].getImageUrl();
+                Log.i(TAG, "sending: " + camPak);
+                intentLocToMap.putExtra(MESSAGE_ID, camPak);
+                startActivity(intentLocToMap);
             }
         });
 
