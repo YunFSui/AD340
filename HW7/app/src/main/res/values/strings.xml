@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">DOTCamerasWithGoogleMap</string>
+    <string name="button_action">initiate camera contact</string>
+    <string name="awaits">Waiting for Connection...</string>
+    <string name="fails">Connection has Failed :(</string>
+</resources>
