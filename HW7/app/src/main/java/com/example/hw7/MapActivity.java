@@ -17,16 +17,24 @@ import android.widget.TextView;
 //device loc
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-public class MapActivity extends AppCompatActivity implements View.OnClickListener {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private final static String TAG = "From MapActivity :=";
 
     private FusedLocationProviderClient mLocationClient;
     private boolean mLocationPremissionGranted = false;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -35,31 +43,39 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
 
         mLocationClient = LocationServices
                 .getFusedLocationProviderClient(this);
-        Button button =findViewById(R.id.get_location);
-        button.setOnClickListener(this);
+
+        SupportMapFragment mapFragment =
+                (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
-    @Override
-    public void onClick(View view) {
-        getLocationPermission();
-
-        getLocation();
-    }
 
     @SuppressLint("MissingPermission")
     private void getLocation() {
         if (mLocationPremissionGranted){
             Task location = mLocationClient.getLastLocation();
-            location.addOnSuccessListener(new OnSuccessListener<Location>() {
+
+            location.addOnCompleteListener(new OnCompleteListener<Location>() {
+
                 @Override
-                public void onSuccess(Location actualLocation) {
+                public void onComplete(@NonNull Task<Location> task) {
+                    Location actualLocation = task.getResult();
                     if (actualLocation != null) {
                         String latLong = String.format("Lat: %f, Long: %f",
                                 actualLocation.getLatitude(),
                                 actualLocation.getLongitude());
 
-                        TextView textView = findViewById(R.id.location_data);
-                        textView.setText(latLong);
+                        mMap.setMyLocationEnabled(true);
+                        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+                        //Update the map
+                        LatLng d_loc = new LatLng(actualLocation.getLatitude(),
+                                actualLocation.getLongitude());
+                        mMap.addMarker(new MarkerOptions()
+                                .position(d_loc).title("Current Location"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(d_loc, 10));
+
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
                     } else {
                         Log.e(TAG, "Location is null ...");
                     }
@@ -102,5 +118,14 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                 }
             }
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        getLocationPermission();
+
+        getLocation();
     }
 }
