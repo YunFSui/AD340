@@ -1,6 +1,7 @@
 package com.example.hw7;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
@@ -13,9 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.example.hw7.DOTCams;
-
 
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<String> {
@@ -83,7 +81,19 @@ public class MainActivity extends AppCompatActivity
         DOTCamRecyclerAdapter adapter = new DOTCamRecyclerAdapter(cams);
         recyclerView.setAdapter(adapter);
 
+        final Intent intentLocTomap = new Intent(this, MapActivity.class);
+
+        adapter.setListener(new DOTCamRecyclerAdapter.Listener() {
+            @Override
+            public void onClick(int position) {
+                Log.i(TAG, "clicked");
+                startActivity(intentLocTomap);
+            }
+        });
+
     }
+
+
 
     @Override
     public void onLoaderReset(@NonNull Loader<String> loader) {
