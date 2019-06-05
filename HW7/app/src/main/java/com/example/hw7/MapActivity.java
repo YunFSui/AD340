@@ -13,6 +13,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -24,11 +27,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-
+import com.squareup.picasso.Picasso;
 
 
 import java.io.IOException;
@@ -43,6 +47,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mLocationClient;
     private boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
+    private String StreetAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -79,11 +84,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         //Device Location
                         LatLng d_loc = new LatLng(actualLocation.getLatitude(),
                                 actualLocation.getLongitude());
-                        String StreetAddress = streetAddress(actualLocation);
+                        StreetAddress = streetAddress(actualLocation);
                         StreetAddress = addressFilter(StreetAddress, latLong);
                         /*Log.i(TAG, "Street Address:" + StreetAddress);*/
                         mMap.addMarker(new MarkerOptions()
-                                .position(d_loc).title("Current Address: " + StreetAddress)
+                                .position(d_loc)
+                                .title("Current Address:")
+                                .snippet(StreetAddress)
                                 .icon(BitmapDescriptorFactory
                                         .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
@@ -93,10 +100,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         Double camLat = Double.parseDouble(camData[0]);
                         Double camLng = Double.parseDouble(camData[1]);
                         String camDescription = camData[2];
+                        /*String imgUrl = camData[3];*/
                         LatLng c_loc = new LatLng(camLat, camLng);
                         mMap.addMarker(new MarkerOptions().position(c_loc)
-                                .title("Camera @ " + camDescription));
+                                .title("Camera @ " + camDescription)
+                                /*.snippet(imgUrl)*/);
 
+                        /*mMap.setInfoWindowAdapter(new MapInfoWindowAdapter());*/
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(d_loc, 10));
 
                         mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
@@ -207,4 +217,43 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         return stAddress;
     }
+
+    @Deprecated
+    class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
+
+        private final View camView;
+
+        MapInfoWindowAdapter(){
+            camView = getLayoutInflater().inflate(R.layout.info_window_camera, null);
+        }
+
+        //https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.InfoWindowAdapter
+        //http://android-er.blogspot.com/2013/01/create-custom-info-contents-for-by.html
+        @Override
+        public View getInfoContents(Marker marker){
+            TextView view = (TextView)camView.findViewById(R.id.title_camera);
+            view.setText(marker.getTitle());
+            /*ImageView camImage = (ImageView)camView.findViewById(R.id.image_camera);*/
+            String imgUrl = marker.getSnippet();
+            Log.d(TAG, imgUrl);
+            if (imgUrl == StreetAddress){
+                TextView address = new TextView(null);
+                address.setText(StreetAddress);
+            } else {
+                ImageView camImage = new ImageView(null);
+
+                Picasso.get().load(imgUrl).into(camImage);
+            }
+
+            return camView;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker){
+            return null;
+        }
+
+
+    }
+
 }
