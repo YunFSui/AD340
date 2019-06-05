@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,29 +13,32 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
-//device loc
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private final static String TAG = "From MapActivity :=";
 
     private FusedLocationProviderClient mLocationClient;
-    private boolean mLocationPremissionGranted = false;
+    private boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
 
     @Override
@@ -52,7 +57,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @SuppressLint("MissingPermission")
     private void getLocation() {
-        if (mLocationPremissionGranted){
+        if (mLocationPermissionGranted){
             Task location = mLocationClient.getLastLocation();
 
             location.addOnCompleteListener(new OnCompleteListener<Location>() {
@@ -71,8 +76,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         //Device Location
                         LatLng d_loc = new LatLng(actualLocation.getLatitude(),
                                 actualLocation.getLongitude());
+                        String StreetAddress = streetAddress(actualLocation);
+                        StreetAddress = addressFilter(StreetAddress, latLong);
+                        /*Log.i(TAG, "Street Address:" + StreetAddress);*/
                         mMap.addMarker(new MarkerOptions()
-                                .position(d_loc).title("Current Location")
+                                .position(d_loc).title("Current Address: " + StreetAddress)
                                 .icon(BitmapDescriptorFactory
                                         .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
@@ -83,7 +91,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         Double camLng = Double.parseDouble(camData[1]);
                         String camDescription = camData[2];
                         LatLng c_loc = new LatLng(camLat, camLng);
-                        mMap.addMarker(new MarkerOptions().position(c_loc).title(camDescription));
+                        mMap.addMarker(new MarkerOptions().position(c_loc)
+                                .title("Camera @ " + camDescription));
 
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(d_loc, 10));
 
@@ -106,7 +115,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED){
-            mLocationPremissionGranted = true;
+            mLocationPermissionGranted = true;
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -119,13 +128,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        mLocationPremissionGranted = false;
+        mLocationPermissionGranted = false;
         switch (requestCode) {
             // requestCode is our ID of our request
             case 1: {
                 if (grantResults.length>0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    mLocationPremissionGranted = true;
+                    mLocationPermissionGranted = true;
                     getLocation();
                 }
             }
@@ -139,5 +148,60 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         getLocationPermission();
 
         getLocation();
+    }
+
+    /*reference dev doc on geocoder:
+        https://developer.android.com/training/location/display-address.html*/
+    private String streetAddress(Location location){
+        String stAddress;
+        List<Address> addresses = null;
+
+        try{
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            addresses = geocoder.getFromLocation(location.getLatitude(),
+                    location.getLongitude(), 1);
+        } catch (IOException ioExp){
+            Log.e(TAG, "GMS geocoder service not available" + ioExp);
+            stAddress = "service_not_available";
+        } catch (IllegalArgumentException illegalArgumentException){
+            Log.e(TAG, "Invaild LatLng at: "
+                    + "Lat-" + location.getLatitude()
+                    + "Lng-" + location.getLongitude()
+                    , illegalArgumentException);
+            stAddress = "location_illegal";
+        }
+
+        if (addresses == null || addresses.isEmpty()){
+            Log.e(TAG, "Street address not found.");
+            stAddress = "location_not_found";
+        } else {
+            Address address = addresses.get(0);
+            /*not sure why doc is using ArrayList and such, multiple place on method limit only one
+            address acquired.*/
+            ArrayList<String> addressFragments = new ArrayList<String>();
+
+            //Fetch the address Lines use getAddressLine
+            for (int i = 0; i <= address.getMaxAddressLineIndex(); i++){
+                addressFragments.add(address.getAddressLine(i));
+            }
+
+            //Log.i(TAG, addressFragments.get(0));
+            stAddress = addressFragments.get(0);
+        }
+        return stAddress;
+    }
+
+    private String addressFilter(String stAddress, String latLong){
+
+        if (stAddress == "service_not_available"
+                || stAddress == "location_illegal" ){
+            Toast toast = Toast.makeText(
+                    this, stAddress,Toast.LENGTH_SHORT);
+            toast.show();
+        } else if (stAddress == "location_not_found"){
+            stAddress = latLong;
+        }
+
+        return stAddress;
     }
 }

@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<String> {
 
     private final static String TAG = "From MainActivity := ";
-    public static final String MESSAGE_ID = "my.message";
+    public static final String MESSAGE_ID = "camera.message";
 
     private DOTCams[] cams;
 

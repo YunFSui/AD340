@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--FINE_LOCATION not working-->
+    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
@@ -13,6 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!--no need to use intent...-->
+<!--        <service android:name=".FetchAddressIntentService"
+            android:exported="false" />-->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
